@@ -9,3 +9,16 @@ package-lock.json
 # These will be merged with frontend/.gitignore
 
 
+# Node modules
+**/node_modules/
+
+# Env files
+**/.env
+
+# Build outputs
+**/dist/
+**/build/
+
+# Logs
+**/logs
+*.log

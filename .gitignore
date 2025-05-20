@@ -1,24 +1,50 @@
-# Common ignores
+# === General ===
 node_modules/
 .env
 .vscode/
 uploads/
 package-lock.json
-
-# Frontend-specific ignores (if needed)
-# These will be merged with frontend/.gitignore
-
-
-# Node modules
-**/node_modules/
-
-# Env files
-**/.env
-
-# Build outputs
-**/dist/
-**/build/
-
-# Logs
-**/logs
+yarn.lock
+pnpm-lock.yaml
 *.log
+logs/
+*.tmp
+
+# === OS-specific ===
+.DS_Store
+Thumbs.db
+
+# === Git ===
+.git/
+
+# === Frontend ===
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
+frontend/build/
+frontend/dist/
+frontend/.next/
+frontend/.turbo/
+frontend/coverage/
+
+# === Backend ===
+backend/node_modules/
+backend/.env
+backend/.env.local
+backend/logs/
+backend/uploads/
+backend/coverage/
+
+# === Test and Coverage ===
+coverage/
+*.lcov
+
+# === Build Artifacts ===
+build/
+dist/
+*.tsbuildinfo
+
+# === Editor Directories ===
+.idea/
+*.swp
+*.swo

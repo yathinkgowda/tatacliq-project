@@ -1,34 +1,44 @@
 import React from 'react';
 
-function Cards() {
-  const images = [
-    'https://assets.tatacliq.com/medias/sys_master/images/63600370974750.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371040286.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371105822.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371171358.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371236894.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371302430.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371367966.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371433502.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371499038.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371564574.png',
-    'https://assets.tatacliq.com/medias/sys_master/images/63600371630110.png',
-  ];
+function Cards({onBrandSelect,onCategorySelect}) {
+const imageObjects = [
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600370974750.png', name: 'WESTSIDE' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371040286.png', name: 'Casual Wear' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371105822.png', name: 'Mens' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371171358.png', name: 'Image 4' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371236894.png', name: 'Image 5' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371302430.png', name: 'Footwear' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371367966.png', name: 'Image 7' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371433502.png', name: 'Gold Jewellers' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371499038.png', name: 'Image 9' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371564574.png', name: 'Image 10' },
+  { img: 'https://assets.tatacliq.com/medias/sys_master/images/63600371630110.png', name: 'puma' },
+];
+
 
   const handleCardClick = (imageUrl, index) => {
-    console.log(`Card ${index + 1} clicked: ${imageUrl}`);
+    console.log(imageUrl,"imageUrlimageUrlimageUrl");
     // Example: navigate, open modal, or set selected image state
     // navigate(`/details/${index}`);
+    if(imageUrl==="WESTSIDE"||imageUrl==="puma"){
+        onBrandSelect(imageUrl);
+
+    }else{
+       onCategorySelect(imageUrl)
+    }
+
   };
+
+ 
 
   return (
     <>
       <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', padding: '1rem' }}>
-        {images.map((imageUrl, index) => (
+        {imageObjects.map((imageUrl, index) => (
           <div
             key={index}
             className="hover-card"
-            onClick={() => handleCardClick(imageUrl, index)}
+            onClick={() => handleCardClick(imageUrl.name, index)}
             style={{
               width: '180px',
               height: '120px',
@@ -40,7 +50,7 @@ function Cards() {
             }}
           >
             <img
-              src={imageUrl}
+              src={imageUrl?.img}
               alt={`Card ${index + 1}`}
               style={{
                 width: '100%',

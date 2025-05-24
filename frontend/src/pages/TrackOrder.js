@@ -7,16 +7,22 @@ import setCurrentProduct from '../actions/setCurrentProduct';
 import { Button } from 'react-bootstrap';
 
 const TrackOrder = () => {
+    const Email = localStorage.getItem('userEmail') ;
+
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedOrder, setExpandedOrder] = useState(null);
   const dispatch = useDispatch();
-
     const handleCurrentProduct = (order) => {
     dispatch(setCurrentProduct(order?.items[0]));
   };
+console.log(orders,"ordersordersordersorders")
+const userEmail = Email;
 
+const filteredOrders = orders.filter(order =>
+  order.items.some(item => item.email === userEmail)
+);
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -114,7 +120,7 @@ const TrackOrder = () => {
       </motion.h1>
       
       <div className="orders-container">
-        {orders.map((order, index) => (
+        {filteredOrders?.map((order, index) => (
           <motion.div 
             key={order._id}
             initial={{ opacity: 0, y: 20 }}
@@ -159,9 +165,11 @@ const TrackOrder = () => {
                       />
                     </div>
                     <div className="product-details">
-                      <div className="product-brand">{order.items?.[0]?.name}</div>
-                      <div className="product-name">{order.items?.[0]?.brand}</div>
-                      
+                      <div className="product-brand"> {order.items?.[0]?.name}</div>
+                      <div className="product-name">Brand - {order.items?.[0]?.brand}</div>
+                      <div className="product-name">Size - {order.items?.[0]?.size}</div>
+                      <div className="product-name">quantity - {order.items?.[0]?.quantity}</div>
+
                       <div className="price-section">
                         <div className="price-row">
                           {/* <span>{order.items?.[0]?.newPrice}</span> */}

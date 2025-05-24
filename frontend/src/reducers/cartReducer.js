@@ -1,4 +1,3 @@
-// cartReducer.js (updated)
 const initialState = {
   cartItems: [],
   cartCounter: 0,
@@ -9,74 +8,73 @@ const initialState = {
 };
 
 const cartReducer = (state = initialState, action) => {
-  console.log(action,"actionactionaction",state)
+  console.log(state,"statestate",action)
   switch (action.type) {
     case 'ADD_TO_CART': {
-      if (!action.payload || typeof action.payload.newPrice !== 'number') {
-        console.error('ADD_TO_CART: Invalid payload', action.payload);
+      if (!action.payload || typeof action.payload.newPrice !== 'number' ) {
+        console.error('Invalid cart item payload');
         return state;
       }
 
-      // Use MongoDB _id instead of id
-      const existingIndex = state.cartItems.findIndex(item => item._id === action.payload._id);
-      let updatedCartItems;
+      const quantity = Math.max(Number(action.payload.quantity) || 1, 1);
+      const size = action.payload.size;
+      const _id = action.payload._id;
+
+      const existingIndex = state.cartItems.findIndex(
+        item => item._id === _id 
+      );
+
+      let updatedItems = [...state.cartItems];
+      
       if (existingIndex !== -1) {
-        updatedCartItems = state.cartItems.map((item) => {
-          if (item._id === action.payload._id) {
-            const newQuantity = item.quantity + 1;
-            return {
-              ...item,
-              quantity: newQuantity,
-              total_item_price: newQuantity * item.newPrice
-,
-            };
-          }
-          return item;
-        });
+        updatedItems[existingIndex] = {
+          ...updatedItems[existingIndex],
+          quantity: updatedItems[existingIndex].quantity + quantity,
+          total_item_price: (updatedItems[existingIndex].quantity + quantity) * action.payload.newPrice
+        };
       } else {
-        updatedCartItems = [
-          ...state.cartItems,
-          {
-            ...action.payload,
-            quantity: 1,
-            total_item_price: action.payload.newPrice
-,
-          }
-        ];
+        updatedItems.push({
+          ...action.payload,
+          quantity,
+          total_item_price: quantity * action.payload.newPrice
+        });
       }
 
-      const newCartCounter = state.cartCounter + 1;
-      const newTotalPrice = updatedCartItems.reduce((acc, item) => acc + item.total_item_price, 0);
-      const newTaxes = newTotalPrice * 0.18;
-      const newGrandTotal = newTotalPrice + newTaxes + state.deliveryCharges;
-console.log(state,"statestatestatestate")
+      const newTotal = updatedItems.reduce((sum, item) => sum + item.total_item_price, 0);
+      const newTaxes = newTotal * 0.18;
+      const newGrandTotal = newTotal + newTaxes + state.deliveryCharges;
+
       return {
         ...state,
-        cartItems: updatedCartItems,
-        cartCounter: newCartCounter,
-        totalPrice: newTotalPrice,
+        cartItems: updatedItems,
+        cartCounter: state.cartCounter + quantity,
+        totalPrice: newTotal,
         taxes: newTaxes,
-        grandTotal: newGrandTotal,
+        grandTotal: newGrandTotal
       };
     }
 
     case 'REMOVE_FROM_CART': {
-      const itemToRemove = state.cartItems.find(item => item._id === action.payload._id);
-      if (!itemToRemove) return state;
+      const { _id, size } = action.payload;
+      const itemIndex = state.cartItems.findIndex(
+        item => item._id === _id && item.size === size
+      );
 
-      const updatedCartItems = state.cartItems.filter(item => item._id !== action.payload._id);
-      const newCartCounter = state.cartCounter - itemToRemove.quantity;
-      const newTotalPrice = updatedCartItems.reduce((acc, item) => acc + item.total_item_price, 0);
-      const newTaxes = newTotalPrice * 0.18;
-      const newGrandTotal = newTotalPrice + newTaxes + state.deliveryCharges;
+      if (itemIndex === -1) return state;
+
+      const removedQuantity = state.cartItems[itemIndex].quantity;
+      const updatedItems = state.cartItems.filter((_, index) => index !== itemIndex);
+      const newTotal = updatedItems.reduce((sum, item) => sum + item.total_item_price, 0);
+      const newTaxes = newTotal * 0.18;
+      const newGrandTotal = newTotal + newTaxes + state.deliveryCharges;
 
       return {
         ...state,
-        cartItems: updatedCartItems,
-        cartCounter: newCartCounter,
-        totalPrice: newTotalPrice,
+        cartItems: updatedItems,
+        cartCounter: state.cartCounter - removedQuantity,
+        totalPrice: newTotal,
         taxes: newTaxes,
-        grandTotal: newGrandTotal,
+        grandTotal: newGrandTotal
       };
     }
 

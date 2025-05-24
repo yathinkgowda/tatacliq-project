@@ -15,6 +15,7 @@ const Viewtrack = ({ orderId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 const ordervalue = orderDetails?.items?.length > 0 ? orderDetails.items[0] : null;
+console.log("orderDetailsorderDetails",ordervalue)
   const statusOrder = [
     'order_received',
     'Packed',

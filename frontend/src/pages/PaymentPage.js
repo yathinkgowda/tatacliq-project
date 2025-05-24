@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import axios from "axios";
@@ -17,8 +17,28 @@ const PaymentPage = () => {
   const [paymentIntent, setPaymentIntent] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [selectedCoupon, setSelectedCoupon] = useState(null);
+  const [coupons, setCoupons] = useState([]);
+  const [showCouponModal, setShowCouponModal] = useState(false);
+    const userEmail = localStorage.getItem('userEmail') ;
 
   const formatPrice = (price) => `₹${price.toFixed(2)}`;
+  const discountedTotal = grandTotal - (selectedCoupon?.amount || 0);
+const cartItemsvalue = cartItems?.map(item => ({
+  ...item,
+  status: "order_received",
+  email:userEmail,
+
+}));
+console.log(cartItemsvalue,"paymentIntentpaymentIntent")
+
+  useEffect(() => {
+    const availableCoupons = [];
+    if (grandTotal > 1000) availableCoupons.push({ code: 'NEW100', amount: 100 });
+    if (grandTotal > 3000) availableCoupons.push({ code: 'NEUCARD', amount: 500 });
+    if (grandTotal > 8000) availableCoupons.push({ code: 'BIGSAVE', amount: 1000 });
+    setCoupons(availableCoupons);
+  }, [grandTotal]);
 
   if (!location.state) {
     return (
@@ -33,14 +53,14 @@ const PaymentPage = () => {
     try {
       const orderData = {
         address,
-        items: cartItems,
+        items: cartItemsvalue,
         totalPrice,
         deliveryCharges,
         taxes,
-        grandTotal,
+        grandTotal: discountedTotal,
         paymentId: paymentIntent.id,
         status: paymentIntent.status === 'requires_cod' ? 'pending' : 'completed',
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       };
 
       await axios.post("http://localhost:4500/api/orders", orderData);
@@ -76,6 +96,7 @@ const PaymentPage = () => {
                     <h6>{item.title}</h6>
                     <p className="mb-1">Price: {formatPrice(item.newPrice)}</p>
                     <p className="mb-0">Qty: {item.quantity}</p>
+                    <p className="mb-0">Size: {item.size}</p>
                   </div>
                 </div>
               ))}
@@ -93,9 +114,15 @@ const PaymentPage = () => {
                   <p>Taxes:</p>
                   <p>{formatPrice(taxes)}</p>
                 </div>
+                {selectedCoupon && (
+                  <div className="d-flex justify-content-between">
+                    <p>Coupon Discount ({selectedCoupon.code}):</p>
+                    <p>-{formatPrice(selectedCoupon.amount)}</p>
+                  </div>
+                )}
                 <div className="d-flex justify-content-between fw-bold mt-2">
                   <h5>Total:</h5>
-                  <h5>{formatPrice(grandTotal)}</h5>
+                  <h5>{formatPrice(discountedTotal)}</h5>
                 </div>
               </div>
             </div>
@@ -123,17 +150,40 @@ const PaymentPage = () => {
             <div className="card-body">
               <Elements stripe={stripePromise}>
                 <CheckoutForm 
-                  amount={Math.round(grandTotal * 100)}
+                  amount={Math.round(discountedTotal * 100)}
                   onSuccess={handlePaymentSuccess}
                   setError={setError}
                   setLoading={setLoading}
                   address={address}
+                  openCouponModal={() => setShowCouponModal(true)}
                 />
               </Elements>
             </div>
           </div>
         </div>
       </div>
+
+      <Modal show={showCouponModal} onHide={() => setShowCouponModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Available Coupons</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {coupons.map(coupon => (
+            <Button 
+              key={coupon.code}
+              onClick={() => {
+                setSelectedCoupon(coupon);
+                setShowCouponModal(false);
+              }}
+              className="w-100 mb-2"
+              variant="outline-primary"
+            >
+              {coupon.code} - Save ₹{coupon.amount}
+            </Button>
+          ))}
+          {coupons.length === 0 && <p>No coupons available for this order total.</p>}
+        </Modal.Body>
+      </Modal>
 
       <Modal show={paymentSuccess} onHide={() => navigate("/")} centered>
         <Modal.Header closeButton>
@@ -179,7 +229,7 @@ const PaymentPage = () => {
   );
 };
 
-const CheckoutForm = ({ amount, onSuccess, setError, setLoading, address }) => {
+const CheckoutForm = ({ amount, onSuccess, setError, setLoading, address, openCouponModal }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentMethod, setPaymentMethod] = useState('card');
@@ -189,7 +239,6 @@ const CheckoutForm = ({ amount, onSuccess, setError, setLoading, address }) => {
     event.preventDefault();
     
     if (paymentMethod === 'cod') {
-      // setLoading(true);
       setError(null);
       try {
         const mockPaymentIntent = {
@@ -283,6 +332,16 @@ const CheckoutForm = ({ amount, onSuccess, setError, setLoading, address }) => {
             onClick={() => setPaymentMethod('cod')}
           >
             Cash on Delivery
+          </button>
+        </div>
+        
+        <div className="d-flex justify-content-end mt-2">
+          <button
+            type="button"
+            className="btn btn-outline-secondary btn-sm"
+            onClick={openCouponModal}
+          >
+            Check for Coupons
           </button>
         </div>
       </div>

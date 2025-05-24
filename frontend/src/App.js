@@ -17,6 +17,10 @@ import CardCarousel3 from './components/CardCarousel3'
 import CardCarousel4 from './components/CardCarousel4'
 import CardCarousel5 from './components/CardCarousel5'
 import CardCarousel6 from './components/CardCarousel6'
+import ClickCash from './pages/ClickCash'
+import GiftCard from './pages/GiftCard'
+import GiftCardReplica from './pages/GiftCardReplica'
+import ClicKCare from './pages/ClicKCare'
 import WishList from './pages/Wishlist';
 import Admin from './pages/Admin';
 import AdminMainPage from './Admin/AdminMainBanner';
@@ -28,6 +32,7 @@ import OrderSuccess from './components/OrderSuccess'
 import OrderList from './pages/OrderList'
 import Footer1 from './pages/Footer1'
 import Footer2 from './pages/Footer2'
+import Footercash from './pages/Footercash'
 
 // Load Stripe with your publishable key
 const stripePromise = loadStripe("YOUR_PUBLISHABLE_KEY");
@@ -53,6 +58,10 @@ function App() {
           <Route path="/CardCarousel4" element={<CardCarousel4/>} />
           <Route path="/CardCarousel5" element={<CardCarousel5/>} />
           <Route path="/CardCarousel6" element={<CardCarousel6/>} />
+          <Route path="/ClickCash" element={<ClickCash/>} />
+          <Route path="/GiftCard" element={<GiftCard/>} />
+          <Route path="/GiftCardReplica" element={<GiftCardReplica/>} />
+          <Route path="/ClicKCare" element={<ClicKCare/>} />
           <Route path="/reset-password/:token" element={<ResetPassword/>} />
           <Route path="/WishList" element={<WishList />} />
           <Route path="/admin" element={<Admin />} />
@@ -70,6 +79,7 @@ function App() {
             <Route path="/order-success" element={<OrderSuccess />} />
             <Route path="/Footer1" element={<Footer1 />} />
             <Route path="/Footer2" element={<Footer2 />} />
+            <Route path="/Footercash" element={<Footercash />} />
         </Routes>
       
       </BrowserRouter>

@@ -15,11 +15,10 @@ function Login() {
     e.preventDefault();
     try {
       const res = await axios.post('http://localhost:4500/auth/Login', form);
-      
       // Store both token and email in localStorage
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('userEmail', res.data.user.email);
-      localStorage.setItem('firstName', res.data.user.firstName);
+      localStorage.setItem('userEmail', res?.data?.user?.email);
+      localStorage.setItem('firstName', res?.data?.user?.firstName);
 
       if(res?.data?.user?.email === "admin12@gmail.com") {
         navigate('/AdminMainPage');

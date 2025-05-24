@@ -1,160 +1,66 @@
-// import React, { useState, useEffect } from 'react';
-// import { useParams, useNavigate } from 'react-router-dom';
+
+// import React, { useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
 // import { useDispatch } from 'react-redux';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 // import '@fortawesome/fontawesome-free/css/all.min.css';
 // import { addToCart } from '../actions/cartAction';
 
-// const ProductDetails = () => {
-//   const { id } = useParams();
+// const ProductDetails = ({ product }) => {
+//   const [mainImage, setMainImage] = useState(product?.image);
+//   const [selectedSize, setSelectedSize] = useState('L');
+//   const [quantity, setQuantity] = useState(1);
 //   const navigate = useNavigate();
 //   const dispatch = useDispatch();
-//   const [product, setProduct] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
-//   const [mainImage, setMainImage] = useState('/placeholder-image.jpg');
-
-//   useEffect(() => {
-//     let isMounted = true; // To prevent state updates after component unmounts
-
-//     const fetchProduct = async () => {
-//       try {
-//         // 1. Set loading state and clear previous errors
-//         if (isMounted) {
-//           setLoading(true);
-//           setError(null);
-//         }
-
-//         // 2. Configure API request
-//         const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:4500';
-//         const endpoint = `${API_URL}/auth/products/${id}`;
-        
-//         const response = await fetch(endpoint, {
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           credentials: 'include',
-//         });
-
-//         // 3. Handle response
-//         if (!response.ok) {
-//           throw new Error(`HTTP error! Status: ${response.status}`);
-//         }
-
-//         const contentType = response.headers.get('content-type');
-//         if (!contentType || !contentType.includes('application/json')) {
-//           throw new Error('Received non-JSON response');
-//         }
-
-//         const data = await response.json();
-
-//         // 4. Validate data structure
-//         if (!data || typeof data !== 'object' || !data.id) {
-//           throw new Error('Invalid product data structure');
-//         }
-
-//         // 5. Update state if component is still mounted
-//         if (isMounted) {
-//           setProduct(data);
-//           setMainImage(data.image || '/placeholder-image.jpg');
-//         }
-//       } catch (err) {
-//         console.error('Product fetch error:', err);
-//         if (isMounted) {
-//           setError(err.message || 'Failed to load product details');
-//         }
-//       } finally {
-//         if (isMounted) {
-//           setLoading(false);
-//         }
-//       }
-//     };
-
-//     fetchProduct();
-
-//     // Cleanup function
-//     return () => {
-//       isMounted = false;
-//     };
-//   }, [id]);
+//   const MAX_STOCK = 5;
 
 //   const handleAddToCart = () => {
-//     if (product) {
-//       dispatch(addToCart(product));
+//     if (quantity > MAX_STOCK) {
+//       alert(`Only ${MAX_STOCK} items available in stock!`);
+//       return;
 //     }
+
+//     const cartItem = {
+//       ...product,
+//       size: selectedSize,
+//       quantity: quantity
+//     };
+
+//     dispatch(addToCart(cartItem));
+//     navigate('/cart');
 //   };
 
-//   // Loading state
-//   if (loading) {
-//     return (
-//       <div className="container my-5">
-//         <div className="d-flex justify-content-center">
-//           <div className="spinner-border text-primary" role="status">
-//             <span className="visually-hidden">Loading...</span>
-//           </div>
-//         </div>
-//       </div>
-//     );
-//   }
+//   const handleQuantityChange = (e) => {
+//     let value = parseInt(e.target.value) || 1;
+//     value = Math.max(1, Math.min(MAX_STOCK, value));
+//     setQuantity(value);
+//   };
 
-//   // Error state
-//   if (error || !product) {
-//     return (
-//       <div className="container my-5">
-//         <div className="alert alert-danger">
-//           <h4>Error Loading Product</h4>
-//           <p>{error || 'Product not found'}</p>
-//           <div className="d-flex gap-2">
-//             <button 
-//               className="btn btn-primary"
-//               onClick={() => navigate(-1)}
-//             >
-//               Go Back
-//             </button>
-//             <button 
-//               className="btn btn-secondary"
-//               onClick={() => window.location.reload()}
-//             >
-//               Try Again
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   // Success state
 //   return (
 //     <div className="container my-5">
 //       <div className="row g-4 shadow p-4">
-//         {/* Product Image Section */}
+//         {/* Left: Image Section */}
 //         <div className="col-md-6 text-center">
 //           <img
 //             src={mainImage}
-//             alt={product.title}
+//             alt="Main"
 //             className="img-fluid rounded"
 //             style={{ maxHeight: 400 }}
-//             onError={(e) => {
-//               e.target.src = '/placeholder-image.jpg';
-//             }}
 //           />
 //           <div className="mt-3">
 //             <img
-//               src={product.image || '/placeholder-thumbnail.jpg'}
-//               alt={`${product.title} thumbnail`}
+//               src={product?.image}
+//               alt="Thumbnail"
 //               className="img-thumbnail"
 //               style={{ width: 80, cursor: 'pointer' }}
-//               onClick={() => setMainImage(product.image || '/placeholder-image.jpg')}
-//               onError={(e) => {
-//                 e.target.src = '/placeholder-thumbnail.jpg';
-//               }}
+//               onClick={() => setMainImage(product?.image)}
 //             />
 //           </div>
 //         </div>
 
-//         {/* Product Info Section */}
+//         {/* Right: Product Details Section */}
 //         <div className="col-md-6">
-//           <h2>{product.title || 'Untitled Product'}</h2>
+//           <h2>{product?.name}</h2>
 //           <a href="#" className="d-block mb-2 text-decoration-none">Visit Store</a>
 
 //           <div className="mb-3">
@@ -169,184 +75,98 @@
 //           </div>
 
 //           <div className="mb-3">
-//             <p className="mb-1 text-muted">
-//               Old Price: <del>$257.00</del>
-//             </p>
 //             <p className="fw-bold text-success">
-//               New Price: ${product.price || 'N/A'}
+//               New Price: ${product?.newPrice}
+//             </p>
+//             <p className="mb-1 text-muted">
+//               Old Price: <del>${product?.oldPrice}</del>
 //             </p>
 //           </div>
 
 //           <div className="mb-3">
 //             <h5>About this item:</h5>
-//             <p>{product.description || 'No description available.'}</p>
+//             <p>{product?.description || 'High-quality product with premium design.'}</p>
 //             <ul className="list-unstyled">
-//               <li>Color: <strong>Black</strong></li>
-//               <li>Available: <strong>In Stock</strong></li>
-//               <li>Category: <strong>Shoes</strong></li>
-//               <li>Shipping Area: <strong>Worldwide</strong></li>
-//               <li>Shipping Fee: <strong>Free</strong></li>
+//               <li>Color: <strong>{product?.color}</strong></li>
+//               <li>Available: <strong>{MAX_STOCK} {product?.stock}</strong></li>
+//               <li>Category: <strong>{product?.category}</strong></li>
+//               <li>Shipping Area: <strong>{product?.shippingArea}</strong></li>
 //             </ul>
 //           </div>
 
-//           <div className="mb-3 d-flex align-items-center">
-//             <input 
-//               type="number" 
-//               min="1" 
-//               defaultValue="1" 
-//               className="form-control me-2" 
-//               style={{ width: 80 }} 
-//             />
-//             <button 
-//               className="btn btn-primary me-2" 
-//               onClick={handleAddToCart}
-//               disabled={!product}
-//             >
-//               Add to Cart <i className="fas fa-shopping-cart ms-1" />
-//             </button>
-//             <button className="btn btn-outline-secondary">Compare</button>
-//           </div>
-
-//           <div>
-//             <p>Share at:</p>
-//             <div className="d-flex gap-3">
-//               {['facebook', 'twitter', 'instagram', 'whatsapp', 'pinterest'].map((social) => (
-//                 <a 
-//                   key={social}
-//                   href={`https://www.${social}.com`} 
-//                   className="text-dark"
-//                   target="_blank" 
-//                   rel="noopener noreferrer"
+//           {/* Size Selection */}
+//           <div className="mb-4">
+//             <h5>Select Size:</h5>
+//             <div className="d-flex gap-2 flex-wrap">
+//               {/* {['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+//                 <button
+//                   key={size}
+//                   onClick={() => setSelectedSize(size)}
+//                   className={`btn ${
+//                     selectedSize === size 
+//                     ? 'btn-primary' 
+//                     : 'btn-outline-secondary'
+//                   }`}
+//                   style={{ minWidth: '60px' }}
 //                 >
-//                   <i className={`fab fa-${social}`} />
-//                 </a>
-//               ))}
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProductDetails;
-
-
-// import React, { useState } from 'react';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import './ProductDetails.css';
-
-// const ProductDetails = ({ product }) => {
-//   // Default product data if none is passed
-//   const defaultProduct = {
-//     name: 'Product Name',
-//     currentPrice: 39.00,
-//     originalPrice: 29.00,
-//     description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-//     size: 'S',
-//     color: 'Blue',
-//     imageUrl: 'https://via.placeholder.com/500x500'
-//   };
-
-//   // Use passed product or default
-//   const productData = product || defaultProduct;
-  
-//   const [quantity, setQuantity] = useState(1);
-
-//   const handleDecrease = () => {
-//     if (quantity > 1) {
-//       setQuantity(quantity - 1);
-//     }
-//   };
-
-//   const handleIncrease = () => {
-//     setQuantity(quantity + 1);
-//   };
-
-//   const handleAddToCart = () => {
-//     alert(`Added ${quantity} ${productData.name} to cart!`);
-//     // Here you would typically dispatch an action to add to cart
-//   };
-
-//   return (
-//     <div className="pd-wrap">
-//       <div className="container">
-//         <div className="heading-section">
-//           <h2>{productData.name}</h2>
-//         </div>
-//         <div className="row">
-//           <div className="col-md-6">
-//             <div className="product-image-container">
-//               <img 
-//                 src={productData.imageUrl} 
-//                 alt={productData.name} 
-//                 className="img-fluid product-image" 
-//               />
-//             </div>
-//           </div>
-//           <div className="col-md-6">
-//             <div className="product-dtl">
-//               <div className="product-info">
-//                 <div className="product-name">{productData.name}</div>
-//                 <div className="product-price-discount">
-//                   {productData.originalPrice && (
-//                     <span className="original-price">${productData.originalPrice.toFixed(2)}</span>
-//                   )}
-//                   <span className="current-price">${productData.currentPrice.toFixed(2)}</span>
-//                 </div>
-//               </div>
-//               <p className="product-description">
-//                 {productData.description}
-//               </p>
-              
-//               <div className="product-options">
-//                 <table className="table">
-//                   <tbody>
-//                     <tr>
-//                       <td><strong>Size</strong></td>
-//                       <td>{productData.size}</td>
-//                     </tr>
-//                     <tr>
-//                       <td><strong>Color</strong></td>
-//                       <td>{productData.color}</td>
-//                     </tr>
-//                   </tbody>
-//                 </table>
-//               </div>
-              
-//               <div className="product-count">
-//                 <label htmlFor="quantity">Quantity</label>
-//                 <div className="quantity-selector">
-//                   <button 
-//                     className="qtyminus btn btn-outline-secondary" 
-//                     onClick={handleDecrease}
-//                     aria-label="Decrease quantity"
-//                   >
-//                     -
-//                   </button>
-//                   <input 
-//                     type="text" 
-//                     name="quantity" 
-//                     value={quantity} 
-//                     className="qty form-control" 
-//                     readOnly 
-//                     aria-label="Current quantity"
-//                   />
-//                   <button 
-//                     className="qtyplus btn btn-outline-secondary" 
-//                     onClick={handleIncrease}
-//                     aria-label="Increase quantity"
-//                   >
-//                     +
-//                   </button>
-//                 </div>
-//                 <button 
-//                   className="btn btn-dark add-to-cart-btn mt-3" 
-//                   onClick={handleAddToCart}
-//                 >
-//                   Add to Cart
+//                   {size}
 //                 </button>
-//               </div>
+//               ))} */}
+//             </div>
+//           </div>
+
+//           {/* Quantity Selection */}
+//           <div className="mb-4">
+//             <h5>Select Quantity:</h5>
+//             <div className="d-flex align-items-center gap-3">
+//               <input
+//                 type="number"
+//                 min="1"
+//                 max={MAX_STOCK}
+//                 value={quantity}
+//                 onChange={handleQuantityChange}
+//                 className="form-control"
+//                 style={{ width: '100px' }}
+//               />
+//               <span className="text-muted small">
+//                 (Maximum {MAX_STOCK} per order)
+//               </span>
+//             </div>
+//           </div>
+
+//           {/* Action Buttons */}
+//           <div className="mb-4 d-flex align-items-center gap-3">
+//             <button 
+//               className="btn btn-primary px-4 py-2" 
+//               onClick={handleAddToCart}
+//             >
+//               <i className="fas fa-shopping-cart me-2" />
+//               Add to Cart
+//             </button>
+//             <button className="btn btn-outline-secondary px-4 py-2">
+//               Compare
+//             </button>
+//           </div>
+
+//           {/* Social Sharing */}
+//           <div className="border-top pt-4">
+//             <p className="text-muted">Share this product:</p>
+//             <div className="d-flex gap-3">
+//               <a href="#" className="text-dark">
+//                 <i className="fab fa-facebook-f fa-lg" />
+//               </a>
+//               <a href="#" className="text-dark">
+//                 <i className="fab fa-twitter fa-lg" />
+//               </a>
+//               <a href="#" className="text-dark">
+//                 <i className="fab fa-instagram fa-lg" />
+//               </a>
+//               <a href="#" className="text-dark">
+//                 <i className="fab fa-whatsapp fa-lg" />
+//               </a>
+//               <a href="#" className="text-dark">
+//                 <i className="fab fa-pinterest fa-lg" />
+//               </a>
 //             </div>
 //           </div>
 //         </div>
@@ -358,32 +178,85 @@
 // export default ProductDetails;
 
 
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // Add this import
-import { useDispatch } from 'react-redux';  // Add this import for dispatch
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { addToCart } from '../actions/cartAction';
+import { Button, Form, InputGroup, Alert } from 'react-bootstrap';
+import { FaMinus, FaPlus } from 'react-icons/fa';
 
 const ProductDetails = ({ product }) => {
   const [mainImage, setMainImage] = useState(product?.image);
-  const navigate = useNavigate();  // This is now correctly initialized
-  const dispatch = useDispatch();  // Initialize dispatch for Redux actions
- console.log(product,"plllllllllllkkkkkkkkkkkk")
- 
-  const handleAddToCart = () => {
-    console.log('Adding product to cart:', product);  // Log to see if the product is passed
-    dispatch(addToCart(product));
-    navigate('/cart');  // Navigate to the cart page after adding the product
-      // Add product to the cart
+  const [selectedSize, setSelectedSize] = useState('L');
+  const [quantity, setQuantity] = useState(1);
+  const [showStockAlert, setShowStockAlert] = useState(false);
+  const [stock, setStock] = useState(null); // Stock will be fetched from backend
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  // Simulate fetching stock from backend
+  useEffect(() => {
+    // This is a placeholder for actual API call to fetch stock
+    const fetchStock = async () => {
+      try {
+        // Simulated API response (replace with actual API call)
+        const response = await new Promise(resolve => 
+          setTimeout(() => resolve({ stock: 7 }), 500)
+        );
+        setStock(response.stock);
+      } catch (error) {
+        console.error('Error fetching stock:', error);
+        setStock(0); // Fallback to 0 if API call fails
+      }
+    };
+    fetchStock();
+  }, []);
+
+  const handleQuantityChange = (newQuantity) => {
+    if (newQuantity < 1) return;
+
+    // Maximum quantity limit set to 6
+    const maxQuantity = Math.min(5, stock || 0);
+
+    if (newQuantity > maxQuantity) {
+      setShowStockAlert(true);
+      setQuantity(maxQuantity);
+    } else {
+      setShowStockAlert(false);
+      setQuantity(newQuantity);
+    }
   };
-  
+
+  const handleAddToCart = () => {
+    if (stock <= 0) {
+      setShowStockAlert(true);
+      return;
+    }
+
+    const cartItem = {
+      ...product,
+      size: selectedSize,
+      quantity: quantity,
+      totalPrice: product?.newPrice * quantity
+    };
+
+    dispatch(addToCart(cartItem));
+    
+    // Update stock after adding to cart (would typically be handled by backend)
+    setStock(prev => prev - quantity);
+    
+    // Reset quantity and alert after adding to cart
+    setQuantity(1);
+    setShowStockAlert(false);
+    // navigate('/cart');
+  };
 
   return (
     <div className="container my-5">
       <div className="row g-4 shadow p-4">
-        {/* Left: Image */}
+        {/* Left: Image Section */}
         <div className="col-md-6 text-center">
           <img
             src={mainImage}
@@ -402,8 +275,7 @@ const ProductDetails = ({ product }) => {
           </div>
         </div>
 
-        {/* Right: Content */}
-        {console.log(product,"kkkkkkkkkkkkkkkkk")}
+        {/* Right: Product Details Section */}
         <div className="col-md-6">
           <h2>{product?.name}</h2>
           <a href="#" className="d-block mb-2 text-decoration-none">Visit Store</a>
@@ -420,59 +292,209 @@ const ProductDetails = ({ product }) => {
           </div>
 
           <div className="mb-3">
-             <p className="fw-bold text-success">
+            <p className="fw-bold text-success">
               New Price: ${product?.newPrice}
             </p>
             <p className="mb-1 text-muted">
               Old Price: <del>${product?.oldPrice}</del>
             </p>
-           
           </div>
 
           <div className="mb-3">
             <h5>About this item:</h5>
-            <p>{product?.description || 'High-quality Nike shoes with premium design.'}</p>
+            <p>{product?.description || 'High-quality product with premium design.'}</p>
             <ul className="list-unstyled">
               <li>Color: <strong>{product?.color}</strong></li>
-              <li>Available: <strong>In Stock</strong></li>
+              <li>Available Stock: <strong>{stock ?? 'Loading...'}</strong></li>
               <li>Category: <strong>{product?.category}</strong></li>
               <li>Shipping Area: <strong>{product?.shippingArea}</strong></li>
-              {/* <li>Shipping Fee: <strong>{product?.category}</strong></li> */}
             </ul>
           </div>
 
-          <div className="mb-3 d-flex align-items-center">
-            <input type="number" min="1" defaultValue="1" className="form-control me-2" style={{ width: 80 }} />
-            <button className="btn btn-primary me-2" onClick={handleAddToCart}>
-              Add to Cart <i className="fas fa-shopping-cart ms-1" />
-            </button>
-            <button className="btn btn-outline-secondary">Compare</button>
+          {/* Stock Alert */}
+          {showStockAlert && (
+            <Alert 
+              variant="warning" 
+              dismissible 
+              onClose={() => setShowStockAlert(false)}
+            >
+              {stock <= 0 ? 'No items available!' : `Maximum ${Math.min(6, stock)} items can be added!`}
+            </Alert>
+          )}
+
+          {/* Size Selection */}
+          <div className="mb-4">
+  <h5>Select Size:</h5>
+  <div className="d-flex gap-2 flex-wrap">
+    {
+      // Clothing categories
+      ['Ethnic Wear', 'Casual Wear', 'Top', 'Bottom', 'Activewear', 'Girls Clothing', 'Boys Clothing'].includes(product?.category) ?
+        ['S', 'M', 'L', 'XL', 'XXL'].map((size) => (
+          <button
+            key={size}
+            onClick={() => setSelectedSize(size)}
+            className={`btn ${
+              selectedSize === size 
+                ? 'btn-primary' 
+                : 'btn-outline-secondary'
+            }`}
+            style={{ minWidth: '60px' }}
+            disabled={stock <= 0}
+          >
+            {size}
+          </button>
+        )) :
+      // Footwear categories
+      ['Sandles', 'Shoes', 'FlipFlop'].includes(product?.category) ?
+        ['6', '7', '8', '9', '10', '11'].map((size) => (
+          <button
+            key={size}
+            onClick={() => setSelectedSize(size)}
+            className={`btn ${
+              selectedSize === size 
+                ? 'btn-primary' 
+                : 'btn-outline-secondary'
+            }`}
+            style={{ minWidth: '60px' }}
+            disabled={stock <= 0}
+          >
+            {size}
+          </button>
+        )) :
+      // No sizes for other categories
+      null
+    }
+  </div>
+</div>
+
+          {/* Quantity Selection */}
+          <div className="mb-4">
+            <h5>Select Quantity:</h5>
+            <div className="d-flex align-items-center gap-3">
+              <InputGroup style={{ width: '180px' }}>
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => handleQuantityChange(quantity - 1)}
+                  disabled={stock <= 0 || quantity <= 1}
+                >
+                  <FaMinus />
+                </Button>
+                <Form.Control
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => handleQuantityChange(parseInt(e.target.value) || 1)}
+                  min="1"
+                  max={Math.min(6, stock || 0)}
+                  className="text-center"
+                  disabled={stock <= 0}
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => handleQuantityChange(quantity + 1)}
+                  disabled={stock <= 0 || quantity >= Math.min(6, stock || 0)}
+                >
+                  <FaPlus />
+                </Button>
+              </InputGroup>
+              {stock <= 0 && (
+                <span className="text-danger small">
+                  Out of Stock
+                </span>
+              )}
+            </div>
           </div>
 
-          <div>
-            <p>Share at:</p>
-            <a href="https://www.facebook.com" className="me-2 text-dark" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-facebook-f" />
-            </a>
-            <a href="https://twitter.com" className="me-2 text-dark" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-twitter" />
-            </a>
-            <a href="https://www.instagram.com" className="me-2 text-dark" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-instagram" />
-            </a>
-            <a href="https://wa.me" className="me-2 text-dark" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-whatsapp" />
-            </a>
-            <a href="https://www.pinterest.com" className="me-2 text-dark" target="_blank" rel="noopener noreferrer">
-              <i className="fab fa-pinterest" />
-            </a>
+          {/* Action Buttons */}
+          <div className="mb-4 d-flex align-items-center gap-3">
+            <button 
+              className="btn btn-primary px-4 py-2" 
+              onClick={handleAddToCart}
+              disabled={stock <= 0}
+            >
+              <i className="fas fa-shopping-cart me-2" />
+              {stock <= 0 ? 'Out of Stock' : 'Add to Cart'}
+            </button>
+            <button 
+              className="btn btn-outline-secondary px-4 py-2"
+              disabled={stock <= 0}
+            >
+              Compare
+            </button>
+          </div>
+
+          {/* Social Sharing */}
+          <div className="border-top pt-4">
+            <p className="text-muted">Share this product:</p>
+            <div className="d-flex gap-3">
+              <a href="#" className="text-dark">
+                <i className="fab fa-facebook-f fa-lg" />
+              </a>
+              <a href="#" className="text-dark">
+                <i className="fab fa-twitter fa-lg" />
+              </a>
+              <a href="#" className="text-dark">
+                <i className="fab fa-instagram fa-lg" />
+              </a>
+              <a href="#" className="text-dark">
+                <i className="fab fa-whatsapp fa-lg" />
+              </a>
+              <a href="#" className="text-dark">
+                <i className="fab fa-pinterest fa-lg" />
+              </a>
+            </div>
           </div>
         </div>
       </div>
+
+      {/* CSS Styles */}
+      <style>{`
+        .btn-primary {
+          background-color: #a000c8;
+          border-color: #a000c8;
+          transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 6px rgba(160, 0, 200, 0.2);
+        }
+        .btn-primary:disabled {
+          background-color: #ccc;
+          border-color: #ccc;
+        }
+        .quantity-input-group {
+          width: 180px;
+          margin: 0 auto;
+        }
+        .quantity-input-group .btn {
+          background: white;
+          border: 1px solid #ddd;
+          color: #a000c8;
+          font-weight: bold;
+        }
+        .quantity-input-group .btn:hover {
+          background: #f0f0f0;
+        }
+        .quantity-input-group .form-control {
+          text-align: center;
+          font-weight: bold;
+          border-left: none;
+          border-right: none;
+          background: white;
+        }
+        .alert-warning {
+          background: #fff3cd;
+          border: none;
+          border-radius: 8px;
+          color: #856404;
+          margin-bottom: 20px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .alert-warning .close {
+          color: #856404;
+        }
+      `}</style>
     </div>
   );
 };
-
-
 
 export default ProductDetails;

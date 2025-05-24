@@ -93,10 +93,11 @@ const MainNavbar = ({ onSearchChange, searchQuery, onBrandSelect, onCategorySele
               <a href="#" className="navbar-brand d-flex align-items-center mb-0 h1">
                 <strong>Tata</strong> CLiQ <span style={{ color: '#00bcd4' }}>Luxury</span>
               </a>
-              <div className="d-flex align-items-center" style={{ margin: '0px 5px 0px 50px'}}>
-                <a className="nav-link text-white small" href="#">CLiQ Cash</a>
-                <a className="nav-link text-white small" href="#">Gift Card</a>
-                <a className="nav-link text-white small" href="#">CLiQ Care</a>
+              <div className="d-flex align-items-center" style={{ margin: '0px 5px 0px 8px'}}>
+              <Link className="nav-link text-white small" style={{ margin: '0px 6px 0px 5px'}}to="/ClickCash">CLiQ Cash</Link> 
+              <Link className="nav-link text-white small"style={{ margin: '0px 5px 0px 8px'}} to="/GiftCard">Gift Card</Link>  
+              <Link className="nav-link text-white small" style={{ margin: '0px 6px 0px 5px'}}to="/ClicKCare">CLiQ Care</Link> 
+                
                 <li className="nav-link text-white small">
                   <Link className="nav-link text-white small" to="trackOrder">Track Orders</Link>
                 </li>

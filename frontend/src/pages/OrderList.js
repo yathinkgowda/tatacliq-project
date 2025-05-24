@@ -226,7 +226,7 @@ const OrderList = () => {
                               }
                             >
                               <option value="order_received">Order Received</option>
-                              <option value="order_processed">Packed</option>
+                              <option value="Packed">Packed</option>
                               {/* <option value="manufacturing_in_progress">Dispatched</option> */}
                               <option value="order_dispatched">Order Dispatched</option>
                               <option value="order_delivered"> Order Delivered</option>

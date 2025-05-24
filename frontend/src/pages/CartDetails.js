@@ -14,7 +14,7 @@ const CartDetails = () => {
   const taxes = useSelector((state) => state.cart.taxes);
   const grandTotal = useSelector((state) => state.cart.grandTotal);
   const navigate = useNavigate();
-
+console.log(cartItems,"cartItemscartItemscartItemscartItems")
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [showNewAddressModal, setShowNewAddressModal] = useState(false);
 
@@ -137,19 +137,21 @@ const CartDetails = () => {
 
         {cartItems.length ? (
           <>
-            <h3 className="border-bottom py-2 mb-3 mt-5">Shopping Cart</h3>
+         <h3 className="border-bottom py-2 mb-3 mt-5">Shopping Cart</h3>
             <div className="row">
               <div className="col-md-8 shadow">
-                <div className="row border-bottom py-3">
-                  <div className="col-md-9">Item</div>
-                  <div className="col-md-1 text-end">Cost</div>
+                {/* Cart Header - Adjusted Columns */}
+                <div className="row border-bottom py-3 fw-bold">
+                  <div className="col-md-6">Item</div>
+                  <div className="col-md-1 text-end">Size</div>
+                  <div className="col-md-2 text-end">Cost</div>
                   <div className="col-md-1 text-end">Qty</div>
-                  <div className="col-md-1 text-end">Total</div>
+                  <div className="col-md-2 text-end">Total</div>
                 </div>
 
-                {cartItems.map((item) => (
-                  <div className="row py-4 border-bottom" key={item.id || item._id}>
-                    <div className="col-md-9 d-flex">
+               {cartItems.map((item) => (
+                  <div className="row py-4 border-bottom align-items-center" key={item.id || item._id}>
+                    <div className="col-md-6 d-flex align-items-center">
                       <img
                         src={item.image}
                         alt={item.name}
@@ -158,16 +160,17 @@ const CartDetails = () => {
                       />
                       <h6 className="ps-3 mb-0 text-truncate">{item.name}</h6>
                     </div>
-                    <div className="col-md-1 text-end">{formatPrice(item.newPrice)}</div>
+                    <div className="col-md-1 text-end">{item?.size}</div>
+                    <div className="col-md-2 text-end">{formatPrice(item.newPrice)}</div>
                     <div className="col-md-1 text-end">{item.quantity}</div>
-                    <div className="col-md-1 text-end">
+                    <div className="col-md-2 text-end">
                       {formatPrice(item.total_item_price)}
                     </div>
                   </div>
                 ))}
 
                 <div className="row py-3 pe-3">
-                  <div className="offset-md-9 col-md-1">
+                  <div className="offset-md-8 col-md-1">
                     <h5 className="text-end">Total</h5>
                   </div>
                   <div className="col-md-1 text-end">
@@ -180,7 +183,7 @@ const CartDetails = () => {
               </div>
 
               <div className="col-md-4">
-                <div className="shadow p-3 ms-2 mt-2">
+                <div className="shadow p-5 ms-1 mt-1">
                   <div className="d-flex justify-content-between mb-2">
                     <p>Sub Total</p>
                     <p>{formatPrice(totalPrice)}</p>

@@ -68,11 +68,14 @@ useEffect(() => {
   };
 
   const handleCategorySelect = (category) => {
+
     setSelectedCategory(category);
     filterProducts(searchQuery, selectedBrand, category);    // pass ALL
   };
 
   const filterProducts = (query, brand, category) => {
+            console.log(query,"queryquery",brand,"brandbrand",category,"categorycategory")
+
     const filtered = product?.filter((product) => {
       const matchesSearch =
         product?.name?.toLowerCase()?.includes(query.toLowerCase()) ||
@@ -105,7 +108,9 @@ useEffect(() => {
       </div>
       <div style={{marginTop:"120px"}}>
       {(searchQuery.trim() === '' && selectedBrand.trim() === '' && selectedCategory.trim() === '') && <Carousel />}
-      {(searchQuery.trim() === '' && selectedBrand.trim() === '' && selectedCategory.trim() === '') && <Cards />}
+      {(searchQuery.trim() === '' && selectedBrand.trim() === '' && selectedCategory.trim() === '') && <Cards         onBrandSelect={handleBrandSelect}         onCategorySelect={handleCategorySelect}
+
+/>}
       {(searchQuery.trim() === '' && selectedBrand.trim() === '' && selectedCategory.trim() === '') && < CardCarousel/>}
       {(searchQuery.trim() === '' && selectedBrand.trim() === '' && selectedCategory.trim() === '') && < CardCarousel1/>}
       {(searchQuery.trim() === '' && selectedBrand.trim() === '' && selectedCategory.trim() === '') && < CardCarousel2/>}

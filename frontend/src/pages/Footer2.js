@@ -28,8 +28,8 @@ const TataCliqBanner = () => {
             Download the Android app from the Play Store or the iOS app from Apple App Store and get set to enjoy a range of benefits. Apart from the best deals, amazing offers and the latest styles online, the app also gives you the flexibility to shop at your convenience. Use the easy share options to share your shopping with your friends and family to ensure you're buying something perfect. With constant updates and a host of new features being introduced constantly, enjoy a shopping experience that you'll love.
           </p>
           <div className="mt-3">
-            <a href="#" className="btn btn-outline-dark me-2">Play Store</a>
-            <a href="#" className="btn btn-outline-dark">App Store</a>
+            <a href="https://play.google.com/store/search?q=tatacliq&c=apps&hl=en" className="btn btn-outline-dark me-2">Play Store</a>
+            <a href="https://www.apple.com/in/search/tatcliq?src=globalnav" className="btn btn-outline-dark">App Store</a>
           </div>
         </div>
 

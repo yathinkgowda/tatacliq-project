@@ -212,19 +212,7 @@ const FooterSection = () => {
   <p><a href="/wishlist" className="text-decoration-none text-dark">My Wishlist</a></p>
 </Col>
 
-          <Col md={4}>
-            <h6 className="fw-bold">Tata CLiQ Offerings</h6>
-            <p>
-              Watches for Men | Campus Shoes | Sandals for Men | Sneakers for Men | <br />
-              Reebok Shoes | Cotton Kurtis | Woodland Shoes | Jumpsuits | Allen Solly | <br />
-              Sparx Shoes | Gold Rings | Formal Shoes for Men | Sports Shoes for Men | <br />
-              Wallets for Men | Ladies Watches | Trolley Bags | Handbags for Women | <br />
-              Sling Bags for Women | Casual Shoes for Men | Boots for Men | Digital Watches | <br />
-              Sonata Watches | Sneakers for Women | Running Shoes | Puma Shoes | <br />
-              Boots for Women | Skechers | Malabargold | Fabindia | Utsa | Vark | Gia | <br />
-              LOV | Sitemap
-            </p>
-          </Col>
+          
         </Row>
       </Container>
     </div>

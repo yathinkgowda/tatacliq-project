@@ -617,7 +617,7 @@ const ClickCash = () => {
               fontSize: '0.875rem',
               margin: 0
             }}>
-             {userEmail}llllllllllll
+             {userEmail}
             </p>
           </div>
 

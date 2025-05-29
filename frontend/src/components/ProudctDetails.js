@@ -318,7 +318,7 @@ const ProductDetails = ({ product }) => {
               dismissible 
               onClose={() => setShowStockAlert(false)}
             >
-              {stock <= 0 ? 'No items available!' : `Maximum ${Math.min(6, stock)} items can be added!`}
+              {stock <= 0 ? 'No items available!' : `Maximum ${Math.min(5, stock)} items can be added!`}
             </Alert>
           )}
 

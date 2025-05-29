@@ -90,7 +90,7 @@ const MainNavbar = ({ onSearchChange, searchQuery, onBrandSelect, onCategorySele
         <div className="col-10 d-flex flex-column">
           <nav className="navbar navbar-dark bg-dark py-2 w-100">
             <div className="container-fluid d-flex justify-content-between align-items-center">
-              <a href="#" className="navbar-brand d-flex align-items-center mb-0 h1">
+              <a href="https://luxury.tatacliq.com/?gclsrc=aw.ds&&cid=ps:Google_GL_Perf_Search_Pur_Sok:GenericKw_Both_AllAge_MF_Auto:Generic_Text_AllProduct_CCS_250523_20199766282&gad_source=1&gad_campaignid=20199766282&gbraid=0AAAAADPC9t2vBQgrW8Rfk1zfZMeAMydBe&gclid=Cj0KCQjwxdXBBhDEARIsAAUkP6gCz5Zq-UuWfOF9IyR1WPG-XVtMzr0WIA0Jmy_gRD5b-M4h06H3jYMaAqi3EALw_wcB" className="navbar-brand d-flex align-items-center mb-0 h1">
                 <strong>Tata</strong> CLiQ <span style={{ color: '#00bcd4' }}>Luxury</span>
               </a>
               <div className="d-flex align-items-center" style={{ margin: '0px 5px 0px 8px'}}>

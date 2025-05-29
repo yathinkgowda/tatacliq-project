@@ -69,17 +69,12 @@ function App() {
           <Route path="/TrackOrder" element={<TrackOrder />} />
           <Route path="/Viewtrack/:id" element={<Viewtrack />} />
           <Route path="/AdminOrders" element={<AdminOrders />} />
-           <Route path="/OrderList" element={<OrderList />} />
-          
-          {/* Wrap payment-related routes with Elements */}
+         <Route path="/OrderList" element={<OrderList />} />
           <Route path="/Payment" element={<Elements stripe={stripePromise}><Payment /></Elements>} />
-  
-          
-          
-            <Route path="/order-success" element={<OrderSuccess />} />
-            <Route path="/Footer1" element={<Footer1 />} />
-            <Route path="/Footer2" element={<Footer2 />} />
-            <Route path="/Footercash" element={<Footercash />} />
+         <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/Footer1" element={<Footer1 />} />
+          <Route path="/Footer2" element={<Footer2 />} />
+          <Route path="/Footercash" element={<Footercash />} />
         </Routes>
       
       </BrowserRouter>

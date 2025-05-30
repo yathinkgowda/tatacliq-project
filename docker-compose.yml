@@ -34,7 +34,7 @@ services:
     image: mongo
     container_name: mongo-container
     environment:
-      - MONGO_INITDB_DATABASE=test2  # Database name
+      - MONGO_INITDB_DATABASE=product # Database name
     ports:
       - "27017:27017"  # Expose MongoDB on port 27017
     volumes:

@@ -35,7 +35,7 @@ console.log(product,'productproductproduct')
 useEffect(() => {
     async function fetchProduct() {
       try {
-        const res = await axios.get('http://localhost:4500/auth/product');
+        const res = await axios.get('http://3.7.145.181:4500/auth/product');
         
         setProduct(res?.data);
       } catch (err) {
@@ -48,7 +48,7 @@ useEffect(() => {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const res = await axios.get('http://localhost:4500/auth/user');
+        const res = await axios.get('http://3.7.145.181:4500/auth/user');
         setUsers(res.data.users);
       } catch (err) {
         setMessage(err.response?.data?.message || 'Failed to fetch users');

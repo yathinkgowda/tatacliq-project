@@ -17,9 +17,9 @@ services:
   backend:
     container_name: backend-container
     build:
-      context: ./backend # Path to your backend code
+      context: ./backend  # Path to your backend code
     ports:
-      - "4500:4500"  # Expose backend on port 5003
+      - "4500:4500"  # Expose backend on port 4500
     environment:
       - MONGO_URL=mongodb://mongo-container:27017/product  # Use internal Docker hostname for MongoDB
       - JWT_SECRET=your_super_secret_key  # JWT secret for backend authentication

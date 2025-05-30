@@ -35,7 +35,7 @@ mongoose.connect(mongoUri, {
 
 // Enhanced Middleware
 app.use(cors({
-  origin: 'http://localhost:4000', // Adjust according to your frontend
+  origin: ['http://localhost:4000', 'http://13.204.10.74:4000'], // Adjust according to your frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
